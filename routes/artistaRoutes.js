@@ -1,9 +1,32 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
+import multer from 'multer'; // Importamos multer
 import Artista from '../models/artista.js';
 
 const router = express.Router();
+
+// Configurar multer para manejar la subida de archivos
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/uploads'); // Carpeta donde se guardarán los archivos
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`); // Nombre único para cada archivo
+    },
+});
+const upload = multer({ storage });
+
+// Ruta para subir imágenes
+router.post('/upload', upload.single('file'), (req, res) => {
+    try {
+        const fileURL = `/uploads/${req.file.filename}`; // URL del archivo subido
+        res.status(200).json({ url: fileURL });
+    } catch (error) {
+        console.error('Error al subir el archivo:', error);
+        res.status(500).json({ error: 'Error al subir el archivo' });
+    }
+});
 
 // Ruta para crear un nuevo artista
 router.post('/', async (req, res) => {
@@ -17,18 +40,17 @@ router.post('/', async (req, res) => {
         // Generar archivo de perfil
         const perfilHTML = generarPerfilHTML(nuevoArtista);
         const perfilPath = path.join('public/perfiles', `${nombre.replace(/\s+/g, '_')}.html`);
-        
+
         fs.writeFileSync(perfilPath, perfilHTML);
 
         // Enviar respuesta con la URL del perfil
         res.status(201).json({
-            message: "Perfil creado exitosamente",
-            perfilURL: `/perfiles/${nombre.replace(/\s+/g, '_')}.html`
+            message: 'Perfil creado exitosamente',
+            perfilURL: `/perfiles/${nombre.replace(/\s+/g, '_')}.html`,
         });
-
     } catch (error) {
-        console.error("Error al crear el perfil:", error);
-        res.status(500).json({ error: "Error al crear el perfil" });
+        console.error('Error al crear el perfil:', error);
+        res.status(500).json({ error: 'Error al crear el perfil' });
     }
 });
 
@@ -62,8 +84,8 @@ function generarPerfilHTML(artista) {
                     <p>${artista.descripcion}</p>
                 </div>
                 <div class="instagram-link">
-                    ${artista.spotify ? `<a href="${artista.spotify}" target="_blank">Spotify</a>` : ""}
-                    ${artista.instagram ? `<a href="${artista.instagram}" target="_blank">Instagram</a>` : ""}
+                    ${artista.spotify ? `<a href="${artista.spotify}" target="_blank">Spotify</a>` : ''}
+                    ${artista.instagram ? `<a href="${artista.instagram}" target="_blank">Instagram</a>` : ''}
                 </div>
             </div>
             <div class="right-section">
@@ -76,3 +98,4 @@ function generarPerfilHTML(artista) {
 }
 
 export default router;
+
