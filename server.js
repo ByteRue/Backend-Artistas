@@ -4,9 +4,13 @@ import morgan from 'morgan';
 import cors from 'cors';
 import path from 'path';
 import artistaRoutes from './routes/artistaRoutes.js'; // Importamos las rutas
+import { fileURLToPath } from 'url';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-
 // URL de conexión a MongoDB
 const dbURI = 'mongodb://localhost:27017/artistasDB';  // Asegúrate de que este nombre coincida con el de tu base de datos
 
