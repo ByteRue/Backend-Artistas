@@ -18,10 +18,16 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
 // Middleware
 app.use(express.json());
 app.use(morgan("tiny"));
-app.use(cors());  // Habilitar CORS
+app.use(cors({
+  origin: 'http://localhost:3000',  // La URL donde corre tu frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 
 // Servir archivos estáticos para los perfiles generados
 app.use('/perfiles', express.static('public/perfiles'));
+// Acceder a las imágenes subidas desde el navegador
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // Usar las rutas definidas en 'artistaRoutes.js'
 app.use('/artistas', artistaRoutes);
