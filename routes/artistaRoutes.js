@@ -31,7 +31,14 @@ router.post('/upload', upload.single('file'), (req, res) => {
 // Ruta para crear un nuevo artista
 router.post('/', async (req, res) => {
     try {
+        console.log(req.body);  // Verifica los datos que llegan desde el frontend
+
         const { nombre, categoria, descripcion, imagen, instagram, spotify } = req.body;
+
+        // Verifica si todos los campos necesarios están presentes
+        if (!nombre || !categoria || !descripcion || !imagen) {
+            return res.status(400).json({ error: 'Faltan datos obligatorios' });
+        }
 
         // Crear nuevo artista en la base de datos
         const nuevoArtista = new Artista({ nombre, categoria, descripcion, imagen, instagram, spotify });
@@ -40,6 +47,11 @@ router.post('/', async (req, res) => {
         // Generar archivo de perfil
         const perfilHTML = generarPerfilHTML(nuevoArtista);
         const perfilPath = path.join('public/perfiles', `${nombre.replace(/\s+/g, '_')}.html`);
+
+        // Asegúrate de que la carpeta exista, si no la creas
+        if (!fs.existsSync('public/perfiles')) {
+            fs.mkdirSync('public/perfiles', { recursive: true });
+        }
 
         fs.writeFileSync(perfilPath, perfilHTML);
 
@@ -53,6 +65,7 @@ router.post('/', async (req, res) => {
         res.status(500).json({ error: 'Error al crear el perfil' });
     }
 });
+
 
 // Función para generar el perfil HTML con la plantilla
 function generarPerfilHTML(artista) {
