@@ -24,19 +24,24 @@ MongoClient.connect(mongoUrl, {
   app.use(morgan('tiny'));
   app.use(cors());
 
-// Esquema y modelo de artista
-const artistaSchema = new mongoose.Schema({
-    id: String,
-    name: String,
-    category: String,
-    profilePhoto: String,
-    information: String,
-    shortInformation: String,
-    gallery: [String],
-    links: [String]
+const getArtistas = () => {
+  return new Promise((resolve, reject) => {
+    artistasCollection.find().toArray((err, result) =>{
+      if (err) {
+        reject(err);
+        { else }
+        resolve(result);
+      }
+    });
+  });
+}
+
+app.get('/artistas', (req, res) => {
+  const artistas = getArtistas();
+  res.json(artistas);
 });
 
-const Artista = mongoose.model('Artista', artistaSchema);
+
 
 const artistas = [
   {
