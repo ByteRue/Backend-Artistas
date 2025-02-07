@@ -1,17 +1,28 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
+const { MongoClient } = require('mongodb');
+const morgan = require("morgan");
 
-const app = express();
-app.use(express.json());
-app.use(cors());
-
+const mongoUrl = 'mongodb://localhost:27017';
+const dbName = 'artistasDB';
+let db;
 // Conexión a la base de datos MongoDB
-mongoose.connect('mongodb://localhost:27017/artistasDB', {
+MongoClient.connect(mongoUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}).then(() => console.log('MongoDB conectado'))
-  .catch(err => console.error('Error al conectar a MongoDB:', err));
+}).then(client =>{
+  console.log('conectado a mongodb');
+  db =client.db(artistasDB);
+})
+  .catch(err =>{
+
+  console.error('Error al conectar a MongoDB:', err);
+  });
+  const artistasCollection = db.collection('artistas');
+  
+  app.use(express.json());
+  app.use(morgan('tiny'));
+  app.use(cors());
 
 // Esquema y modelo de artista
 const artistaSchema = new mongoose.Schema({
