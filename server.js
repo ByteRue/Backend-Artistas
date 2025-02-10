@@ -94,15 +94,22 @@ app.get("/artistas/:id", (req, res) => {
 app.post("/addArtista", (req, res) => {
   const { id, name, category, profilePhoto, information, shortInformation, gallery, links } = req.body;
   const nuevoArtista = {
-    id,
-    name,
-    category,
-    profilePhoto,
-    information,
-    shortInformation,
-    gallery,
-    links
-  };
+    id: id,
+    name: name,
+    information: information,
+    shortInformation: shortInformation,
+    gallery : gallery,
+    links: links
+  }
+  const resultNuevoArtista = await artistas.insertOne(nuevoArtista);
+  const nuevaTarjeta = {
+    id: id,
+    profilePhoto: profilePhoto,
+    name: name,
+    category: category,
+    shortInformation: shortInformation
+  }
+  const resultNuevatarjeta = await artistas.insertOne(nuevaTarjeta);
   artistas.push(nuevoArtista);
   res.status(201).json({
     message: "Artista añadido con éxito",
