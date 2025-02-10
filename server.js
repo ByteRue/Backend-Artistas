@@ -3,17 +3,22 @@ import cors from 'cors';
 import { MongoClient } from 'mongodb';
 import morgan from "morgan" ;
 
+const app = express();
+
 const mongoUrl = 'mongodb://localhost:27017';
 const dbName = 'artistasDB';
 let db;
-let artistas = [];
+let artistasCollection;
+let artistas;
+
+
 
 // Conexión a la base de datos MongoDB
 MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true})
 .then(client =>{
   console.log('conectado a mongodb');
   db = client.db(dbName);
-  return db.collection("artistas").find().toArray()
+artistasCollection = db.collection('artistas');
 })
 .then(data =>{
   artistas = data;
@@ -23,7 +28,7 @@ MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true})
   console.error('Error al conectar a MongoDB:', err);
   });
 
-  const artistasCollection = db.collection('artistas');
+  
   
   app.use(express.json());
   app.use(morgan('tiny'));
