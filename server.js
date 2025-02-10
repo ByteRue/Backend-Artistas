@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import MongoClient from 'mongodb';
+import { MongoClient } from 'mongodb';
 import morgan from "morgan" ;
 
 const mongoUrl = 'mongodb://localhost:27017';
@@ -35,7 +35,7 @@ MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true})
 // API
 // Obtener listado artistas
 app.get("/artistas", (req, res) => {
-
+const artistas = artistasCollection.find();
   //Filtrar artista por categoría
   const musicos = artistas.filter(artista => artistas.category ==='Musicos');
   const artesanos = artistas.filter(artista => artistas.category ==='Artesanos');
