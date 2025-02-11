@@ -34,17 +34,39 @@ artistasCollection = db.collection('artistas');
   app.use(morgan('tiny'));
   app.use(cors());
 
+//Crear artistas 
+const crearArtista = async (id, name, information,  gallery, links) => {
+  try {
+    const nuevoArtista = {
+      id: id,
+      name: name,
+      information: information,
+      gallery : gallery,
+      links: links
+    }
+    const result = await artistasCollection.insertOne(nuevoArtista);  // Esto es lo correcto
+    
+    console.log('Artista guardado:', nuevoArtista);  // Cambié `artistaGuardado` por `nuevoArtista`
+    return nuevoArtista;
+    
+  } catch (error) {
+    console.error('Error al crear artista:', error);
+    throw error; // Re-lanzar el error para que se pueda manejar
+  }
+};
 
 
 
 // API
 // Obtener listado artistas
-app.get("/artistas", (req, res) => {
-const artistas = artistasCollection.find();
+app.get("/artistas", async (req, res) => {
+  try {
+const artistas = await artistasCollection.find({}).toArray();
+console.log("Artistas obtenidos:", artistas);
   //Filtrar artista por categoría
-  const musicos = artistas.filter(artista => artistas.category ==='Musicos');
-  const artesanos = artistas.filter(artista => artistas.category ==='Artesanos');
-  const tatuadores = artistas.filter(artista => artistas.category ==='Tatuadores');
+  const musicos = artistas.filter(artista => artista.category ==='Músicos');
+  const artesanos = artistas.filter(artista => artista.category ==='Artesanos');
+  const tatuadores = artistas.filter(artista => artista.category ==='Tatuadores');
   //Mapeamos a los artistas
   const musicosList = musicos.map(artista => ({
     id: artista.id,
@@ -74,6 +96,10 @@ const artistas = artistasCollection.find();
   artesanos: artesanosList,
   tatuadores: tatuadoresList
   });
+  }catch (error) {
+    console.error("Error al obtener artistas:", error);
+    res.status(500).json({ error: "Error al obtener artistas" });
+  }
 });
 
 // Obtener perfil concreto
@@ -91,30 +117,47 @@ app.get("/artistas/:id", (req, res) => {
   });
 });
 // Añadir artista
-app.post("/addArtista", (req, res) => {
-  const { id, name, category, profilePhoto, information, shortInformation, gallery, links } = req.body;
-  const nuevoArtista = {
-    id: id,
-    name: name,
-    information: information,
-    shortInformation: shortInformation,
-    gallery : gallery,
-    links: links
+// Añadir artista
+app.post("/addArtista", async (req, res) => {
+    console.log(req.body); //ver los datos
+  try {
+    const { name, category, profilePhoto, information, shortInformation, gallery, links } = req.body;
+    const artistaExistente = await artistasCollection.findOne({ name });
+
+    if (artistaExistente) {
+      return res.status(400).json({ error: `El artista con el nombre ${name} ya existe.` });
+    }
+
+    // Creamos el objeto para el artista con todos los datos
+    const nuevoArtista = {
+      name,
+      category,
+      profilePhoto,
+      information,
+      shortInformation,
+      gallery,
+      links,
+      tarjeta: {
+        profilePhoto,  // Foto de perfil
+        name,           // Nombre del artista
+        category,       // Categoría
+        shortInformation // Información breve
+      }
+    };
+
+    // Insertamos el nuevo artista en la base de datos
+    await artistasCollection.insertOne(nuevoArtista);
+
+    res.status(201).json({
+      message: "Artista añadido con éxito",
+    });
+  } catch (error) {
+    console.error("Error al añadir artista:", error);
+    res.status(500).json({ error: "Error al añadir artista" });
   }
-  const resultNuevoArtista = await artistas.insertOne(nuevoArtista);
-  const nuevaTarjeta = {
-    id: id,
-    profilePhoto: profilePhoto,
-    name: name,
-    category: category,
-    shortInformation: shortInformation
-  }
-  const resultNuevatarjeta = await artistas.insertOne(nuevaTarjeta);
-  artistas.push(nuevoArtista);
-  res.status(201).json({
-    message: "Artista añadido con éxito",
-  });
 });
+
+
 // escuche
 app.listen(3000, () => {
   console.log("Ready on port 3000!");
