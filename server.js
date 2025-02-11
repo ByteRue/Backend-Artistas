@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { MongoClient } from 'mongodb';
 import morgan from "morgan" ;
+import { ObjectId } from "mongodb";
 
 const app = express();
 
@@ -103,18 +104,33 @@ console.log("Artistas obtenidos:", artistas);
 });
 
 // Obtener perfil concreto
-app.get("/artistas/:id", (req, res) => {
+app.get("/artistas/:id", async (req, res) => {
   const artistaId = req.params.id;
-  const artista = artistas.find(a => a.id === artistaId);
-  res.json({
-    id: artista.id,
-    name: artista.name,
-    category: artista.category,
-    profilePhoto: artista.profilePhoto,
-    information: artista.information,
-    gallery: artista.gallery,
-    links: artista.links
-  });
+
+  // Verificar si el ID es válido antes de usar ObjectId
+  if (!ObjectId.isValid(artistaId)) {
+    return res.status(400).json({ error: "ID inválido" });
+  }
+
+  try {
+    const artista = await db.collection("artistas").findOne({ _id: new ObjectId(artistaId) });
+
+    if (!artista) {
+      return res.status(404).json({ error: "Artista no encontrado" });
+    }
+
+    res.json({
+      id: artista._id, // Asegúrate de devolver el ID correcto
+      name: artista.name,
+      category: artista.category,
+      profilePhoto: artista.profilePhoto,
+      information: artista.information,
+      gallery: artista.gallery,
+      links: artista.links
+    });
+  } catch (error) {
+    res.status(400).json({ error: "ID inválido" });
+  }
 });
 // Añadir artista
 // Añadir artista
