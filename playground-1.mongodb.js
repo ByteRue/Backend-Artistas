@@ -10,7 +10,7 @@ use(database);
 
 db.artistas.insertMany([
   {
-    _id: ,
+    
     name: "Daniela Chinchilla",
     category: "Artesanos",
     shortInformation: "Estudió en la UPV el grado Bellas Artes. Es una artista multidisciplinaria y actualmente se dedica a la creación de piezas con material biodegradable.",
@@ -20,7 +20,7 @@ db.artistas.insertMany([
     links: ["https://www.instagram.com/danielachinchilla__/?igsh=MWtreGduOTZ0cDB1dg%3D%3D#", "https://drive.google.com/file/d/18dEsQFBzya4fF_H-Di6Delrocu8nQ-Xt/view"]
   },
   {
-    _id: ,
+    
     name: "Dario Machin",
     category: "Artesanos",
     shortInformation: "Es un artista plástico originario de la isla de Lanzarote, realizó sus estudios de grado en Bellas Artes por la Universidad Complutense de Madrid y posteriormente el máster en Producción Artística por la Universitat Politècnica de València.",
@@ -30,7 +30,7 @@ db.artistas.insertMany([
     links: ["https://www.instagram.com/dariomachin_/?igsh=NHNqaTNqb2JuenMw#", "https://www.dariomachin.com/statemn"],
   },
   {
-    _id: ,
+    
     name: "Ansiedad Caramelizada",
     category: "Músicos",
     shortInformation: "Es una banda que busca equilibrio entre lo visceral y lo real. Hacen música que puede ser ruidosa o melódica, pero siempre tienen algo de lo que llevan dentro: momentos de caos, de calma y de todo lo  que hay entre medias.",
@@ -40,7 +40,6 @@ db.artistas.insertMany([
     links: ["https://open.spotify.com/artist/1efzATzzQtPzky1sbMjVbQ?si=80yRRH2ESHiFYoe5mkOJHg", "https://www.instagram.com/ansiedadcaramelizada?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="],
   },
   {
-    _id: ,
     name: "Kness",
     category: "Músicos",
     shortInformation: "Es una fusión entre toda música que tenga que ver con el ámbito urbano, trap, rap, detroit, etc. Lo que busca en el mundo urbano es darle una nueva cara y un nuevo aire. Siente que faltan artistas como él, y eso le lanza a querer seguir haciendo música.",
@@ -50,7 +49,6 @@ db.artistas.insertMany([
     links: ["https://open.spotify.com/artist/3hSULzDAv4I2CIbPAIgiM9?si=S7DjxGI6TACeQAZ8l_kNQQ", "https://www.instagram.com/kness.kness?igsh=MXFlNTNzOGhqOGhrdQ=="],
   },
   {
-    _id: ,
     name: "Angie Grim",
     category: "Tatuadores",
     shortInformation: "Tiene un estilo Blackwork concretamente Darkwork que es una rama de dicho estilo que se caracteriza por la temática oscura y tétrica. Siempre le ha gustado todo lo relacionado con las artes oscuras desde pequeña",
@@ -60,7 +58,7 @@ db.artistas.insertMany([
     links: ["https://www.instagram.com/angiegrim?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="],
   },
   {
-    _id: ,
+    
     name: "Gonzalo",
     category: "Tatuadores",
     shortInformation: "Su estilo de tatuaje se inspira en la naturaleza y en lo orgánico, en la sensación de dibujar sin forzar, dejando que la mano y la mente fluyan libremente. Sus líneas se convierten en dibujos que expresan más allá de lo que se ve a simple vista.",
@@ -72,9 +70,8 @@ db.artistas.insertMany([
 ])
 
 // Crear la colección para los artistas
-db.createCollection(collection, {
+db.createCollection('artista', {
   capped: false,  // No es una colección con tamaño fijo
-  autoIndexId: true,  // Índice automático para _id
   validator: {  // Opcional: Validaciones para los datos que se ingresen en la colección
     $jsonSchema: {
       bsonType: "object",

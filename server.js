@@ -105,12 +105,7 @@ console.log("Artistas obtenidos:", artistas);
 
 // Obtener perfil concreto
 app.get("/artistas/:name", async (req, res) => {
-  const artistaName = req.params.id;
-
-  // Verificar si el ID es válido antes de usar ObjectId
-  if (!ObjectId.isValid(artistaName)) {
-    return res.status(400).json({ error: "ID inválido" });
-  }
+  const artistaName = req.params.name;
 
   try {
     const artista = await db.collection("artistas").findOne({ name: artistaName });
