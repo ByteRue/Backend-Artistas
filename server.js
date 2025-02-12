@@ -104,16 +104,16 @@ console.log("Artistas obtenidos:", artistas);
 });
 
 // Obtener perfil concreto
-app.get("/artistas/:id", async (req, res) => {
-  const artistaId = req.params.id;
+app.get("/artistas/:name", async (req, res) => {
+  const artistaName = req.params.id;
 
   // Verificar si el ID es válido antes de usar ObjectId
-  if (!ObjectId.isValid(artistaId)) {
+  if (!ObjectId.isValid(artistaName)) {
     return res.status(400).json({ error: "ID inválido" });
   }
 
   try {
-    const artista = await db.collection("artistas").findOne({ _id: new ObjectId(artistaId) });
+    const artista = await db.collection("artistas").findOne({ name: artistaName });
 
     if (!artista) {
       return res.status(404).json({ error: "Artista no encontrado" });
