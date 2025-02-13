@@ -11,7 +11,7 @@ use(database);
 db.artistas.insertMany([
   {
     
-    name: "Daniela Chinchilla",
+    name: "Daniela_Chinchilla",
     category: "Artesanos",
     shortInformation: "Estudió en la UPV el grado Bellas Artes. Es una artista multidisciplinaria y actualmente se dedica a la creación de piezas con material biodegradable.",
     profilePhoto: "imgDaniela/danielaPortada.png",
@@ -21,7 +21,7 @@ db.artistas.insertMany([
   },
   {
     
-    name: "Dario Machin",
+    name: "Dario_Machin",
     category: "Artesanos",
     shortInformation: "Es un artista plástico originario de la isla de Lanzarote, realizó sus estudios de grado en Bellas Artes por la Universidad Complutense de Madrid y posteriormente el máster en Producción Artística por la Universitat Politècnica de València.",
     profilePhoto: "imgDario/darioPortada.png",
@@ -31,7 +31,7 @@ db.artistas.insertMany([
   },
   {
     
-    name: "Ansiedad Caramelizada",
+    name: "Ansiedad_Caramelizada",
     category: "Músicos",
     shortInformation: "Es una banda que busca equilibrio entre lo visceral y lo real. Hacen música que puede ser ruidosa o melódica, pero siempre tienen algo de lo que llevan dentro: momentos de caos, de calma y de todo lo  que hay entre medias.",
     profilePhoto: "imgAnsiedadCaramelizada/portadaAnsiedadCaramelizada.jpeg",
@@ -49,7 +49,7 @@ db.artistas.insertMany([
     links: ["https://open.spotify.com/artist/3hSULzDAv4I2CIbPAIgiM9?si=S7DjxGI6TACeQAZ8l_kNQQ", "https://www.instagram.com/kness.kness?igsh=MXFlNTNzOGhqOGhrdQ=="],
   },
   {
-    name: "Angie Grim",
+    name: "Angie_Grim",
     category: "Tatuadores",
     shortInformation: "Tiene un estilo Blackwork concretamente Darkwork que es una rama de dicho estilo que se caracteriza por la temática oscura y tétrica. Siempre le ha gustado todo lo relacionado con las artes oscuras desde pequeña",
     profilePhoto: "imgAngie/angiePortada.png",
