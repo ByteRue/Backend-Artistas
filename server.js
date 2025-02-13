@@ -143,11 +143,11 @@ app.post("/addArtista", async (req, res) => {
     const nuevoArtista = {
       name,
       category,
-      profilePhoto,
+      profilePhoto: profilePhoto ? profilePhoto.trim() : "",  // se le asigna el valor de url
       information,
       shortInformation,
-      gallery,
-      links,
+      gallery: gallery ? gallery.split(",").map(url => url.trim()) : [], // asigna el valor de urls y las convierte en arrays separas por ,
+      links: links ? links.split(",").map(url => url.trim()) : [],
       tarjeta: {
         profilePhoto,  // Foto de perfil
         name,           // Nombre del artista
