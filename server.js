@@ -36,11 +36,11 @@ artistasCollection = db.collection('artistas');
   app.use(cors());
 
 //Crear artistas 
-const crearArtista = async (id, name, information,  gallery, links) => {
+const crearArtista = async (name, surname, information,  gallery, links) => {
   try {
     const nuevoArtista = {
-      id: id,
       name: name,
+      surname: surname,
       information: information,
       gallery : gallery,
       links: links
@@ -72,6 +72,7 @@ console.log("Artistas obtenidos:", artistas);
   const musicosList = musicos.map(artista => ({
     id: artista.id,
     name: artista.name,
+    surname: artista.surname,
     category: artista.category,
     profilePhoto: artista.profilePhoto,
     shortInformation: artista.shortInformation
@@ -79,6 +80,7 @@ console.log("Artistas obtenidos:", artistas);
   const artesanosList = artesanos.map(artista => ({
     id: artista.id,
     name: artista.name,
+    surname: artista.surname,
     category: artista.category,
     profilePhoto: artista.profilePhoto,
     shortInformation: artista.shortInformation
@@ -86,6 +88,7 @@ console.log("Artistas obtenidos:", artistas);
   const tatuadoresList = tatuadores.map(artista => ({
     id: artista.id,
     name: artista.name,
+    surname: artista.surname,
     category: artista.category,
     profilePhoto: artista.profilePhoto,
     shortInformation: artista.shortInformation
@@ -115,8 +118,9 @@ app.get("/artistas/:name", async (req, res) => {
     }
 
     res.json({
-      id: artista._id, // Asegúrate de devolver el ID correcto
+      
       name: artista.name,
+      surname: artista.surname,
       category: artista.category,
       profilePhoto: artista.profilePhoto,
       information: artista.information,
@@ -132,7 +136,7 @@ app.get("/artistas/:name", async (req, res) => {
 app.post("/addArtista", async (req, res) => {
     console.log(req.body); //ver los datos
   try {
-    const { name, category, profilePhoto, information, shortInformation, gallery, links } = req.body;
+    const { name, surname, category, profilePhoto, information, shortInformation, gallery, links } = req.body;
     const artistaExistente = await artistasCollection.findOne({ name });
 
     if (artistaExistente) {
@@ -142,12 +146,13 @@ app.post("/addArtista", async (req, res) => {
     // Creamos el objeto para el artista con todos los datos
     const nuevoArtista = {
       name,
+      surname,
       category,
       profilePhoto: profilePhoto ? profilePhoto.trim() : "",  // se le asigna el valor de url
       information,
       shortInformation,
-      gallery: gallery ? gallery.split(",").map(url => url.trim()) : [], // asigna el valor de urls y las convierte en arrays separas por ,
-      links: links ? links.split(",").map(url => url.trim()) : [],
+      gallery: Array.isArray(gallery) ? gallery.map(url => url.trim()) : [] ,
+      links: Array.isArray(links) ? links.map(url => url.trim()) : []   ,   
       tarjeta: {
         profilePhoto,  // Foto de perfil
         name,           // Nombre del artista
