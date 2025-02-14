@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { MongoClient } from 'mongodb';
 import morgan from "morgan" ;
-import { ObjectId } from "mongodb";
+
 
 const app = express();
 
@@ -75,7 +75,8 @@ console.log("Artistas obtenidos:", artistas);
     surname: artista.surname,
     category: artista.category,
     profilePhoto: artista.profilePhoto,
-    shortInformation: artista.shortInformation
+    shortInformation: artista.shortInformation,
+    enlacePerfil:  artista.tarjeta?.enlacePerfil 
   }));
   const artesanosList = artesanos.map(artista => ({
     id: artista.id,
@@ -83,7 +84,8 @@ console.log("Artistas obtenidos:", artistas);
     surname: artista.surname,
     category: artista.category,
     profilePhoto: artista.profilePhoto,
-    shortInformation: artista.shortInformation
+    shortInformation: artista.shortInformation,
+    enlacePerfil:  artista.tarjeta?.enlacePerfil 
   }));
   const tatuadoresList = tatuadores.map(artista => ({
     id: artista.id,
@@ -91,7 +93,8 @@ console.log("Artistas obtenidos:", artistas);
     surname: artista.surname,
     category: artista.category,
     profilePhoto: artista.profilePhoto,
-    shortInformation: artista.shortInformation
+    shortInformation: artista.shortInformation,
+    enlacePerfil:  artista.tarjeta?.enlacePerfil 
   }));
   
   //Devolviendo lista artistas categorizados
@@ -125,7 +128,8 @@ app.get("/artistas/:name", async (req, res) => {
       profilePhoto: artista.profilePhoto,
       information: artista.information,
       gallery: artista.gallery,
-      links: artista.links
+      links: artista.links,
+      enlacePerfil:  artista.tarjeta?.enlacePerfil 
     });
   } catch (error) {
     res.status(400).json({ error: "ID inválido" });
@@ -157,7 +161,8 @@ app.post("/addArtista", async (req, res) => {
         profilePhoto,  // Foto de perfil
         name,           // Nombre del artista
         category,       // Categoría
-        shortInformation // Información breve
+        shortInformation, // Información breve
+        enlacePerfil : `perfil.html?nombre=${encodeURIComponent(name)}` //que genere una url dependiendo del nombre
       }
     };
 
